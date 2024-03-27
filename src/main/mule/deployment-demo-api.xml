@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="cfd5b81e-25a4-4729-bb47-3a17d91e1a5d" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="45067d94-e814-454f-87ad-2b3d4c4c3086" file="Application-DEV.properties" />
+	<flow name="deployment-demo-apiFlow" doc:id="e37c0991-e0d9-4010-b411-9875d9869314" >
+		<http:listener doc:name="Listener" doc:id="c2d3eb1c-e616-4a7b-8fd2-8e6d28e6bd21" config-ref="HTTP_Listener_config" path="/api/deployment"/>
+		<ee:transform doc:name="Transform Message" doc:id="bf7fd137-b2cf-41b6-bf9a-b205544d9ef2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"welcome to anypoint paltform
+ your name is"
+++ attributes.queryParams.name
+ ++ "you reached datatime " 
+ ++ now()]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
